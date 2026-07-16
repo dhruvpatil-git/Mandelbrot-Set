@@ -1,53 +1,169 @@
  # Mandelbrot Set Renderer (CPU)
 
-A C++ implementation of the Mandelbrot Set featuring multithreaded rendering, interactive exploration, and smooth user controls. This project focuses on efficient CPU-based fractal generation and serves as the foundation for a future GPU/OpenGL implementation.
+# Mandelbrot Explorer (OpenGL)
+
+A real-time Mandelbrot fractal explorer built with **C++**, **OpenGL**, **GLFW**, and **GLAD**.
+
+Interactive rendering with smooth zooming and GPU-accelerated visualization.
+
+> 🚀 This branch contains the **OpenGL implementation**.
+> The **CUDA accelerated version** is currently under development.
+
+</div>
+
+---
+
+## Preview
+
+> *(Add screenshots or GIFs here)*
+
+---
 
 ## Features
 
-- Multithreaded Mandelbrot rendering
-- Interactive zoom (mouse wheel and drag)
-- Pan across the complex plane
-- Reset zoom functionality
-- Real-time rendering statistics
-- Smooth continuous coloring
-- Adjustable iteration count
-- Responsive UI built with SFML
+- ⚡ GPU rendering using OpenGL Fragment Shaders
+- 🔍 Interactive Zoom
+- 🖱️ Mouse Panning
+- 🎨 Smooth Fractal Coloring
+- 🖥️ Fullscreen Quad Rendering
+- 📈 High Performance GPU Rendering
+- 🧩 Modular C++ Project Structure
+- 📦 CMake Build System
 
-## Technologies Used
+---
 
-- C++
-- SFML
-- STL Threads
-- Complex Numbers (`std::complex`)
-- Modern C++17
+## Tech Stack
 
-## Controls
+- **Language:** C++17
+- **Graphics API:** OpenGL 4.6
+- **Windowing:** GLFW
+- **OpenGL Loader:** GLAD
+- **Build System:** CMake
 
-| Action | Control |
-|--------|---------|
-| Zoom In/Out | Mouse Wheel |
-| Pan | Click and Drag |
-| Reset View | Reset Button |
+---
 
 ## Project Structure
 
 ```
-application.cpp      Window management and UI
-mandelbrot.cpp       Fractal generation
-main.cpp             Entry point
+Mandelbrot Set/
+│
+├── external/
+│   └── glad/
+│
+├── shaders/
+│   ├── mandelbrot.vert
+│   └── mandelbrot.frag
+│
+├── src/
+│   └── main.cpp
+│
+├── CMakeLists.txt
+└── README.md
 ```
 
-## Performance
+---
 
-The renderer utilizes multiple CPU threads to compute the Mandelbrot set in parallel, significantly reducing render time compared to a single-threaded implementation.
+## Build Instructions
+
+### Requirements
+
+- C++17 Compiler
+- CMake 3.20+
+- OpenGL 4.6
+- GLFW
+- GLAD
+
+### Clone Repository
+
+```bash
+git clone https://github.com/<YOUR_USERNAME>/Mandelbrot-Explorer.git
+cd Mandelbrot-Explorer
+```
+
+### Build
+
+```bash
+mkdir build
+cd build
+
+cmake ..
+cmake --build .
+```
+
+Run the generated executable.
+
+---
+
+## Controls
+
+| Key / Mouse | Action |
+|-------------|--------|
+| Mouse Wheel | Zoom In / Out |
+| Left Mouse Drag | Pan |
+| ESC | Exit |
+
+---
+
+## Rendering Pipeline
+
+```
+CPU
+ │
+ ▼
+Camera Parameters
+ │
+ ▼
+OpenGL Fragment Shader
+ │
+ ▼
+Mandelbrot Iteration
+ │
+ ▼
+Smooth Coloring
+ │
+ ▼
+Framebuffer
+ │
+ ▼
+Window
+```
+
+---
 
 ## Future Improvements
 
-- GPU acceleration using OpenGL shaders
-- CUDA implementation
-- Julia Set support
-- Image export
-- Custom color palettes
-- Performance benchmarking
+- ✅ CUDA Acceleration
+- ✅ CUDA/OpenGL Interoperability
+- ✅ Performance HUD
+- ✅ Julia Set
+- ✅ Multiple Color Palettes
+- ✅ Image Export
+- ✅ Deep Zoom Optimization
+
+---
+
+## Future Branch
+
+The next major milestone of this project is a complete CUDA-powered renderer.
+
+The CUDA implementation will feature:
+
+- CUDA Kernels
+- CUDA/OpenGL Shared Texture
+- Massive Parallel Fractal Computation
+- Higher Performance
+- Real-time Performance HUD
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+<div align="center">
+
+Built with ❤️ using C++ and OpenGL.
 
 OpenGL-Integration Branch contains the GPU integration...
