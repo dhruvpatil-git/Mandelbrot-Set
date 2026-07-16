@@ -15,7 +15,10 @@ Interactive rendering with smooth zooming and GPU-accelerated visualization.
 
 ## Preview
 
-> *(Add screenshots or GIFs here)*
+<img width="1280" height="717" alt="Screenshot 2026-07-16 183233" src="https://github.com/user-attachments/assets/f0a37f59-c19e-4796-8d55-66823ca744d7" />
+
+
+<img width="1258" height="706" alt="image" src="https://github.com/user-attachments/assets/e6f37f3c-e78b-42db-b68c-303a13643888" />
 
 ---
 
@@ -76,8 +79,8 @@ Mandelbrot Set/
 ### Clone Repository
 
 ```bash
-git clone https://github.com/<YOUR_USERNAME>/Mandelbrot-Explorer.git
-cd Mandelbrot-Explorer
+git clone https://github.com/dhruvpatil-git/Mandelbrot-Set.git
+cd Mandelbrot-Set
 ```
 
 ### Build
