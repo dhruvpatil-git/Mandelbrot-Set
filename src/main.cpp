@@ -5,6 +5,7 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <cmath>
+#include "cuda/mandelbrot.cuh"
 
 // Setting initial values 
 double centerX = -0.75;
@@ -139,6 +140,7 @@ GLuint CreateShaderProgram()
 
 int main()
 {
+    runHelloKernel();
     // Initialize GLFW
     if (!glfwInit())
     {
@@ -232,6 +234,7 @@ int main()
     std::cout << "OpenGL : "
               << glGetString(GL_VERSION)
               << '\n';
+    
     // render loop
     while (!glfwWindowShouldClose(window))
     {
