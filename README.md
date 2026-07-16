@@ -1,4 +1,4 @@
-<div align="center">
+ # Mandelbrot Set Renderer (CPU)
 
 # Mandelbrot Explorer (OpenGL)
 
@@ -166,4 +166,4 @@ This project is licensed under the MIT License.
 
 Built with ❤️ using C++ and OpenGL.
 
-</div>
+OpenGL-Integration Branch contains the GPU integration...
