@@ -140,7 +140,6 @@ GLuint CreateShaderProgram()
 
 int main()
 {
-    runHelloKernel();
     // Initialize GLFW
     if (!glfwInit())
     {
