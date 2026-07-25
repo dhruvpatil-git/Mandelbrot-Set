@@ -1,12 +1,18 @@
 #include "mandelbrot.cuh"
 
 #include <cuda_runtime.h>
-#include <iostream>
+#include <vector>
+#include <cmath>
 
 __global__
-void FillKernel(unsigned char* pixels,
-                int width,
-                int height)
+void MandelbrotKernel(
+    unsigned char* pixels,
+    int width,
+    int height,
+    double centerX,
+    double centerY,
+    double zoom,
+    int maxIterations)
 {
     int x = blockIdx.x * blockDim.x + threadIdx.x;
     int y = blockIdx.y * blockDim.y + threadIdx.y;
@@ -14,40 +20,77 @@ void FillKernel(unsigned char* pixels,
     if (x >= width || y >= height)
         return;
 
+    double aspect = (double)width / (double)height;
+
+    double viewHeight = 3.0 / zoom;
+    double viewWidth  = viewHeight * aspect;
+
+    double real = centerX +
+        ((double)x / width - 0.5) * viewWidth;
+
+    double imag = centerY -
+        ((double)y / height - 0.5) * viewHeight;
+
+    double zr = 0.0;
+    double zi = 0.0;
+
+    int iter = 0;
+
+    while (zr * zr + zi * zi <= 4.0 &&
+           iter < maxIterations)
+    {
+        double temp = zr * zr - zi * zi + real;
+        zi = 2.0 * zr * zi + imag;
+        zr = temp;
+        iter++;
+    }
+
     int idx = (y * width + x) * 4;
 
-    pixels[idx + 0] = (unsigned char)(255.0f * x / width);   // R
-    pixels[idx + 1] = (unsigned char)(255.0f * y / height);  // G
-    pixels[idx + 2] = 128;                                   // B
-    pixels[idx + 3] = 255;                                   // A
+    unsigned char color;
+
+    if (iter == maxIterations)
+        color = 0;
+    else
+        color = (unsigned char)(255.0 * iter / maxIterations);
+
+    pixels[idx + 0] = color;
+    pixels[idx + 1] = color;
+    pixels[idx + 2] = color;
+    pixels[idx + 3] = 255;
 }
 
 void GenerateMandelbrotCUDA(
     std::vector<unsigned char>& pixels,
     int width,
     int height,
-    double,
-    double,
-    double,
-    int)
+    double centerX,
+    double centerY,
+    double zoom,
+    int maxIterations)
 {
     pixels.resize(width * height * 4);
 
-    unsigned char* devicePixels;
+    unsigned char* devicePixels = nullptr;
 
-    cudaMalloc(&devicePixels,
-               pixels.size());
+    cudaMalloc(
+        &devicePixels,
+        pixels.size());
 
     dim3 block(16,16);
 
     dim3 grid(
         (width + block.x - 1) / block.x,
-        (height + block.y - 1) / block.y
-    );
+        (height + block.y - 1) / block.y);
 
-    FillKernel<<<grid,block>>>(devicePixels,
-                               width,
-                               height);
+    MandelbrotKernel<<<grid, block>>>(
+        devicePixels,
+        width,
+        height,
+        centerX,
+        centerY,
+        zoom,
+        maxIterations);
 
     cudaMemcpy(
         pixels.data(),

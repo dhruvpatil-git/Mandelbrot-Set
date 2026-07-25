@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <chrono>
 #include <sstream>
 #include <string>
 #include <glad/gl.h>
@@ -187,6 +189,21 @@ int main()
         return -1;
     }
     GLuint shaderProgram = CreateShaderProgram();
+        std::vector<unsigned char> test;
+
+    GenerateMandelbrotCUDA(
+        test,
+        128,
+        128,
+        centerX,
+        centerY,
+        zoom,
+        500
+    );
+
+    std::cout << "CUDA generated "
+            << test.size()
+            << " bytes.\n";
 
     GLint centerLoc = glGetUniformLocation(shaderProgram, "center");
     GLint zoomLoc = glGetUniformLocation(shaderProgram, "zoom");
@@ -234,11 +251,20 @@ int main()
               << glGetString(GL_VERSION)
               << '\n';
     
+    std::vector<unsigned char> cudaPixels;
     // render loop
     while (!glfwWindowShouldClose(window))
     {
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
+
+        int iterations = std::min(
+            1000,
+            std::max(
+                500,
+                static_cast<int>(500 + 40 * std::log2(zoom))
+            )
+        );
 
         glViewport(0, 0, width, height);
 
@@ -265,16 +291,24 @@ int main()
             lastMouseX = mouseX;
             lastMouseY = mouseY;
         }
+        auto start = std::chrono::high_resolution_clock::now();
 
-        glUseProgram(shaderProgram);
-
-        int iterations = std::min(
-            1000,
-            std::max(
-                500,
-                static_cast<int>(500 + 40 * std::log2(zoom))
-            )
+        GenerateMandelbrotCUDA(
+            cudaPixels,
+            width,
+            height,
+            centerX,
+            centerY,
+            zoom,
+            iterations
         );
+
+        auto end = std::chrono::high_resolution_clock::now();
+
+        std::cout << "\rCUDA Time: "
+                << std::chrono::duration<double, std::milli>(end - start).count()
+                << " ms" << std::flush;
+        glUseProgram(shaderProgram);
 
 
         glUniform2d(centerLoc, centerX, centerY);
